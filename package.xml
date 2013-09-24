@@ -9,7 +9,13 @@
   <build_depend>roscpp</build_depend>
   <build_depend>shared_serial</build_depend>
   <build_depend>libreadline-dev</build_depend>
+  <build_depend>libftdipp-dev</build_depend>
+  <build_depend>muparser</build_depend>
+  <build_depend>tinyxml</build_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>shared_serial</run_depend>
   <run_depend>libreadline</run_depend>
+  <run_depend>libftdipp-dev</run_depend>
+  <run_depend>muparser</run_depend>
+  <run_depend>tinyxml</run_depend>
 </package>
