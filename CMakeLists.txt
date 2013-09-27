@@ -44,7 +44,7 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${READLINE_INCLUDE_DIR} ${TIN
 
 # Setup DBL repository stuff
 set(WORKSPACE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -fPIC)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 # Build relevant DBL repo things
 set(TARGET ${PROJECT_NAME}_dbl)
