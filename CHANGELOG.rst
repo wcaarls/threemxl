@@ -2,6 +2,10 @@
 Changelog for package threemxl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.1.4 (2013-09-27)
+------------------
+* threemxl: avoid making list out of CXX_FLAGS
+
 0.1.3 (2013-09-26)
 ------------------
 * threemxl: added pkg-config build dependency
