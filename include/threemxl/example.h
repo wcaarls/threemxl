@@ -2,8 +2,8 @@
 #define __THREEMXL_EXAMPLE_H
 
 #include <ros/ros.h>
-#include <CDxlGeneric.h>
-#include <CDxlGroup.h>
+#include <threemxl/platform/hardware/dynamixel/CDxlGeneric.h>
+#include <threemxl/platform/hardware/dynamixel/CDxlGroup.h>
 
 /// Usage example for CDynamixel and CDynamixelROS
 class DxlROSExample

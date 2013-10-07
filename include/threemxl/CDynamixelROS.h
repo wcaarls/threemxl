@@ -1,8 +1,8 @@
 #ifndef CDYNAMIXELROS_H_
 #define CDYNAMIXELROS_H_
 
-#include <Dynamixel.h>
-#include <threemxl/CDxlROSPacketHandler.h>
+#include <threemxl/platform/hardware/dynamixel/dynamixel/Dynamixel.h>
+#include "CDxlROSPacketHandler.h"
 
 /// Communication with a shared Dynamixel chain
 class CDynamixelROS : public CDynamixel

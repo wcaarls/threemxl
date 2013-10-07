@@ -2,7 +2,7 @@
 #define __THREEMXL_CONSOLE_H
 
 #include <ros/ros.h>
-#include <CDxlGeneric.h>
+#include <threemxl/platform/hardware/dynamixel/CDxlGeneric.h>
 
 class DxlROSConsole;
 

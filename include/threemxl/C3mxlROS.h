@@ -1,7 +1,7 @@
 #ifndef C3MXLROS_H_
 #define C3MXLROS_H_
 
-#include <3mxl.h>
+#include <threemxl/platform/hardware/dynamixel/3mxl/3mxl.h>
 #include <threemxl/CDxlROSPacketHandler.h>
 
 /// Communication with a shared 3mxl chain

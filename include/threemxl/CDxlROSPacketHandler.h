@@ -2,7 +2,7 @@
 #define CDXLROSPACKETHANDLER_H_
 
 #include <ros/ros.h>
-#include <CDxlPacketHandler.h>
+#include <threemxl/platform/hardware/dynamixel/CDxlPacketHandler.h>
 
 class CDxlROSPacketHandler : public CDxlPacketHandler
 {

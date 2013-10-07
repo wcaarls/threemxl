@@ -11,7 +11,7 @@
 //#define __DBG__
 
 #include <ftdi.hpp>
-#include <LxSerial.h>
+#include <threemxl/platform/hardware/serial/LxSerial.h>
 
 class LxFTDI : public LxSerial
 {
