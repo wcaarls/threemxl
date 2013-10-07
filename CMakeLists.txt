@@ -20,9 +20,8 @@ pkg_check_modules(MUPARSER REQUIRED muparser)
 
 catkin_package(
   INCLUDE_DIRS   include
-  LIBRARIES      ${PROJECT_NAME}
+  LIBRARIES      ${PROJECT_NAME} ${TINYXML_LIBRARIES} ${MUPARSER_LIBRARIES} ${LIBFTDIPP_LIBRARIES}
   CATKIN_DEPENDS roscpp
-  DEPENDS        tinyxml libmuparser
 )
 
 ###########
