@@ -2,6 +2,10 @@
 Changelog for package threemxl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.1.5 (2013-10-07)
+------------------
+* threemxl: splitting source and header files
+
 0.1.4 (2013-09-27)
 ------------------
 * threemxl: avoid making list out of CXX_FLAGS
