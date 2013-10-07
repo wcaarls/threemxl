@@ -16,7 +16,7 @@
 #include <threemxl/platform/io/logging/Log2.h>
 
 
-#include "Byte.h"
+#include "../Byte.h"
 #include "../CDxlGeneric.h"
 #include "../CDxlPacket.hpp"
 #include "3mxlControlTable.h"

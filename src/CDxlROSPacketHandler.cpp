@@ -4,7 +4,7 @@
  *      Author: Wouter Caarls
  */
 
-#include <CDxlCom.h>
+#include <threemxl/platform/hardware/dynamixel/CDxlCom.h>
 #include <threemxl/CDxlROSPacketHandler.h>
 #include <shared_serial/SendTo.h>
 #include <shared_serial/Recv.h>

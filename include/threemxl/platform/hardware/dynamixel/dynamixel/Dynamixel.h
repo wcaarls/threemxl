@@ -12,10 +12,10 @@
 #include <math.h>
 #include <threemxl/platform/io/logging/Log2.h>
 
-#include "Byte.h"
-#include "CDxlGeneric.h"
-#include "CDxlPacket.hpp"
-#include "CDxlConfig.h"
+#include "../Byte.h"
+#include "../CDxlGeneric.h"
+#include "../CDxlPacket.hpp"
+#include "../CDxlConfig.h"
 #include "DynamixelControlTable.h"
 
 #define __DBG__

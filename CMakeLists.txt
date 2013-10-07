@@ -40,8 +40,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 # Build relevant DBL repo things
 set(TARGET ${PROJECT_NAME}_dbl)
 add_library(${TARGET} STATIC)
-include(${WORKSPACE_DIR}/src/platform/hardware/dynamixel/dynamixel.cmake)
-include(${WORKSPACE_DIR}/src/platform/io/logging/stdlogging.cmake)
+include(${WORKSPACE_DIR}/dbl/platform/hardware/dynamixel/dynamixel.cmake)
+include(${WORKSPACE_DIR}/dbl/platform/io/logging/stdlogging.cmake)
 
 # Main threemxl library
 add_library(${PROJECT_NAME} src/CDxlROSPacketHandler.cpp ${FTDI_SOURCE})

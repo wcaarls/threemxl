@@ -14,7 +14,11 @@
 class CConfigSection;
 class IConfig;
 class IConfigProperty;
-class mu::Parser;
+
+namespace mu
+{
+  class Parser;
+}
 
 // Base class for a config interface. Useful for giving out interfaces and deleting them later (hence the virtual destructor)
 // Whenever your interface returns a pointer to a new interface,

@@ -6,7 +6,7 @@
 #include <threemxl/console.h>
 #include <threemxl/C3mxlROS.h>
 #include <threemxl/CDynamixelROS.h>
-#include <XMLConfiguration.h>
+#include <threemxl/platform/io/configuration/XMLConfiguration.h>
 
 using std::cout;
 using std::endl;
