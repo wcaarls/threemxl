@@ -6,7 +6,7 @@
  */
 
 #include <threemxl/platform/io/configuration/Configuration.h>
-#include <muParser/muParser.h>
+#include <muParser.h>
 #include <stdlib.h>
 
 #ifdef WIN32
