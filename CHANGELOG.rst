@@ -2,6 +2,10 @@
 Changelog for package threemxl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.1.6 (2013-10-07)
+------------------
+* threemxl: Add explicit transitive library dependencies
+
 0.1.5 (2013-10-07)
 ------------------
 * threemxl: splitting source and header files
