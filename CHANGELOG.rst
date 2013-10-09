@@ -2,6 +2,10 @@
 Changelog for package threemxl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.1.7 (2013-10-09)
+------------------
+* threemxl: don't use explicit muParser path
+
 0.1.6 (2013-10-07)
 ------------------
 * threemxl: Add explicit transitive library dependencies
