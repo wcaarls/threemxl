@@ -1,0 +1,16 @@
+/**
+\mainpage
+\htmlinclude manifest.html
+
+\b threemxl provides a library to communicate with Dynamixel servos and 3mxl motor control boards. It also allows multiple ROS nodes to communicate with a single Dynamixel chain using a shared_serial node.
+
+As \b threemxl depends on some external packages, make sure to run <tt>rosdep install threemxl</tt> at least once!
+
+To quickly test the board, you can use the <tt>console</tt> node. Just type <tt>rosrun threemxl console</tt>, provided you have a <tt>roscore</tt> running somewhere. Note that the console defaults to <tt>/dev/ttyUSB0</tt>. You can specify a different port or namespace as argument.
+
+
+\section codeapi Code API
+
+The main classes are CDynamixel and C3mxl. These communicate with the hardware directly through a serial port (either LxSerial or LxFTDI). The ROS versions, CDynamixelROS and C3mxlROS, just subclass CDynamixel and C3mxl and set the package handler to CDxlROSPacketHandler such that the communication works over a shared_serial node.
+
+*/
