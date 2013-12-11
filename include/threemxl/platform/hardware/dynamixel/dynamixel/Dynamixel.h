@@ -159,6 +159,8 @@ class CDynamixel: public CDxlGeneric
 		virtual double	presentCurrentADCVoltage()	{mLogWarningLn("presentCurrentADCVoltage function not implemented"); return 0;}
 		virtual double	presentAnalog1Voltage()		{mLogWarningLn("presentAnalog1Voltage function not implemented"); return 0;}
 		virtual double	presentAnalog2Voltage()		{mLogWarningLn("presentAnalog2Voltage function not implemented"); return 0;}
+		virtual double	presentAnalog3Voltage()		{mLogWarningLn("presentAnalog3Voltage function not implemented"); return 0;}
+		virtual double	presentAnalog4Voltage()		{mLogWarningLn("presentAnalog4Voltage function not implemented"); return 0;}
 		virtual double	presentTemp()			{return mTemperature;}
 		virtual double	presentCurrent()		{mLogWarningLn("presentCurrent function not implemented");return 0;}
 		virtual double	presentTorque()			{mLogWarningLn("presentTorque function not implemented");return 0;}

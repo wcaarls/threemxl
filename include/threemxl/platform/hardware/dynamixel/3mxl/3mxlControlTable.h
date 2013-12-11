@@ -429,17 +429,25 @@ Description		: contains constants for the controltable used in the
 														// e.g. : 1   : read block 1 samples 1-5
 														// e.g. : 2   : read block 2 samples 6-10
 														// e.g. : 100 : read block 100 samples 496-500
-#define M3XL_BUS_VOLTAGE_L                                              0xC2    // RO Bus Voltage in 10mV
-#define M3XL_BUS_VOLTAGE_H                                              0xC3
-#define M3XL_MOTOR_CURRENT_L                                            0xC4    // Motor current sensor AD voltage in V
-#define M3XL_MOTOR_CURRENT_H                                            0xC5
-#define M3XL_ANA1_VOLTAGE_L                                             0xC6    // RO Analog Voltage in V
-#define M3XL_ANA1_VOLTAGE_H                                             0xC7
-#define M3XL_ANA2_VOLTAGE_L                                             0xC8    // RO Analog Voltage in V
-#define M3XL_ANA2_VOLTAGE_H                                             0xC9
+#define M3XL_BUS_VOLTAGE_L						0xC2    // RO Bus Voltage in 10mV
+#define M3XL_BUS_VOLTAGE_H						0xC3
+#define M3XL_MOTOR_CURRENT_L						0xC4    // Motorcurrent in cA
+#define M3XL_MOTOR_CURRENT_H						0xC5
+#define M3XL_ANA1_VOLTAGE_L						0xC6    // RO Analog Voltage in 10mV
+#define M3XL_ANA1_VOLTAGE_H						0xC7
+#define M3XL_ANA2_VOLTAGE_L						0xC8    // RO Analog Voltage in 10mV
+#define M3XL_ANA2_VOLTAGE_H						0xC9
+#define M3XL_ANA3_VOLTAGE_L						0xCA    // RO Analog Voltage in 10mV
+#define M3XL_ANA3_VOLTAGE_H						0xCB
+#define M3XL_ANA4_VOLTAGE_L						0xCC    // RO Analog Voltage in 10mV
+#define M3XL_ANA4_VOLTAGE_H						0xCD
 
-#define M3XL_SYNC_READ_INDEX                                            0xCA	// Position in sync read chain
-														
+// old
+// #define M3XL_SYNC_READ_INDEX                    0xCA
+
+// new on 10-12-2013
+#define M3XL_SYNC_READ_INDEX						0xD0
+
 // *** ALTERNATIVE CONTROL TABLE IDS FOR Michiel's V4 ***
 // the next 5 parameters can be sent in one syncwrite packet
 #define M3XL_P_ENERGY_L                                                 0xC4    // when start writing at this address

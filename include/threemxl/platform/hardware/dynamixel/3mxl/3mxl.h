@@ -94,6 +94,8 @@ class C3mxl: public CDxlGeneric
 		double		mCurrentADCVoltage;	// Current ADC voltage [V]
 		double		mAnalog1Voltage;	// Analog input 1 voltage [V]
 		double		mAnalog2Voltage;	// Analog input 2 voltage [V]
+		double		mAnalog3Voltage;	// Analog input 3 voltage [V]
+		double		mAnalog4Voltage;	// Analog input 4 voltage [V]
 		double 		mCurrent;		// Current [A]
 		double 		mTorque;		// Torque [Nm]
 		double		mPosition;		// Position [rad]
@@ -283,6 +285,8 @@ class C3mxl: public CDxlGeneric
 		virtual double	presentCurrentADCVoltage()	{return mCurrentADCVoltage;}
 		virtual double	presentAnalog1Voltage()		{return mAnalog1Voltage;}
 		virtual double	presentAnalog2Voltage()		{return mAnalog2Voltage;}
+		virtual double	presentAnalog3Voltage()		{return mAnalog3Voltage;}
+		virtual double	presentAnalog4Voltage()		{return mAnalog4Voltage;}
 		virtual double	presentTemp()			{mLogWarningLn("presentTemp function not implemented");return DXL_NOT_INITIALIZED;}
 		virtual double	presentCurrent()		{return mCurrent;}
 		virtual double	presentTorque()			{return mTorque;}

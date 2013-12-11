@@ -971,8 +971,8 @@ int C3mxl::getSensorVoltages()
 	if (!mInitialized)
 		return DXL_NOT_INITIALIZED;
 	mLogCrawlLn("getSensorVoltages called... ");
-	BYTE data[8];
-	int result = readData(M3XL_BUS_VOLTAGE_L, 8, data);
+	BYTE data[12];
+	int result = readData(M3XL_BUS_VOLTAGE_L, 12, data);
 	if (result != DXL_SUCCESS)
 		return result;
 
@@ -982,6 +982,8 @@ int C3mxl::getSensorVoltages()
 	h.setBits(*(WORD*)(data+2)); mCurrentADCVoltage = h;
 	h.setBits(*(WORD*)(data+4)); mAnalog1Voltage = h;
         h.setBits(*(WORD*)(data+6)); mAnalog2Voltage = h;
+        h.setBits(*(WORD*)(data+8)); mAnalog3Voltage = h;
+        h.setBits(*(WORD*)(data+10)); mAnalog4Voltage = h;
 	return DXL_SUCCESS;
 }
 

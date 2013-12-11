@@ -698,9 +698,17 @@ public:
 		/** \returns Sensor voltage in [V]. */
 		virtual double	presentAnalog1Voltage()=0;
 
-		/// Get cached analog sensor 1 voltage.
+		/// Get cached analog sensor 2 voltage.
 		/** \returns Sensor voltage in [V]. */
 		virtual double	presentAnalog2Voltage()=0;
+
+		/// Get cached analog sensor 3 voltage.
+		/** \returns Sensor voltage in [V]. */
+		virtual double	presentAnalog3Voltage()=0;
+
+		/// Get cached analog sensor 4 voltage.
+		/** \returns Sensor voltage in [V]. */
+		virtual double	presentAnalog4Voltage()=0;
 
 		/// Get cached temperature.
 		/** \returns Temperature in [deg. C]. */

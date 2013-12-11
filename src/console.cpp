@@ -338,7 +338,9 @@ bool DxlROSCommand::execute(ArgList args)
          << "Bus         " << std::setw(8) << std::setprecision(3) << motor->presentBusVoltage() << ", "
          << "Current ADC " << std::setw(8) << std::setprecision(3) << motor->presentCurrentADCVoltage() << ", "
          << "Analog 1    " << std::setw(8) << std::setprecision(3) << motor->presentAnalog1Voltage() << ", "
-         << "Analog 2    " << std::setw(8) << std::setprecision(3) << motor->presentAnalog2Voltage() << endl;
+         << "Analog 2    " << std::setw(8) << std::setprecision(3) << motor->presentAnalog2Voltage() << ", "
+         << "Analog 3    " << std::setw(8) << std::setprecision(3) << motor->presentAnalog3Voltage() << ", "
+         << "Analog 4    " << std::setw(8) << std::setprecision(3) << motor->presentAnalog4Voltage() << endl;
   }
   else if (name_ == "log")
     DXLC_SAFE_CALL(motor->setLogInterval(atoi(args[0].c_str())));
