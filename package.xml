@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>threemxl</name>
-  <version>0.1.7</version>
+  <version>0.1.8</version>
   <description>Dynamixel and 3mxl driver</description>
   <maintainer email="w.caarls@tudelft.nl">Wouter Caarls</maintainer>
   <license>GPL</license>
