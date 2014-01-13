@@ -2,6 +2,12 @@
 Changelog for package threemxl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.1.8 (2014-01-13)
+------------------
+* threemxl: moved sync read index to make room for extra analog inputs
+* threemxl: added documentation
+* threemxl: added C3mxl.h and CDynamixel.h convenience header files
+
 0.1.7 (2013-10-09)
 ------------------
 * threemxl: don't use explicit muParser path
