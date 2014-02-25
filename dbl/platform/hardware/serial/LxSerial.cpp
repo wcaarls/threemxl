@@ -165,7 +165,14 @@ bool	LxSerial::is_port_open()
 // speedcontrol */
 bool	LxSerial::set_speed( LxSerial::PortSpeed baudrate )
 {
-
+#ifdef __APPLE__
+	int speed = baudrate;
+	if ( ioctl( hPort, IOSSIOSPEED, &speed ) == -1 )
+	{
+		perror("Error: Could not set serial port baudrate");
+		return false;
+	}
+#else
 	cfsetispeed(&options, baudrate);								//set incoming baud rate
 	cfsetospeed(&options, baudrate);								//set outgoing baud rate
 
@@ -175,6 +182,7 @@ bool	LxSerial::set_speed( LxSerial::PortSpeed baudrate )
 	}
 	usleep(100);													// additional wait for correct functionality
 	tcflush(hPort, TCIOFLUSH);										// flush terminal data
+#endif
 	return true;
 }
 
