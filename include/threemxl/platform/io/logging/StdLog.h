@@ -130,13 +130,11 @@ class CStdStringbuf: public std::stringbuf
 						}
 
 						// Adjust the write buffer pointers. This effectively empties the buffer.
-#ifdef _MSC_VER
+#if defined(__APPLE__) || defined(_MSC_VER)
 						setg(pbase(), pbase(), epptr());
 						setp(pbase(), epptr());
 #else
-						setg(pbase(), pbase(), epptr());
-						setp(pbase(), epptr());
-						//_M_sync(const_cast<char_type*>(_M_string.data()), 0, 0);
+						_M_sync(const_cast<char_type*>(_M_string.data()), 0, 0);
 #endif
 					}
 				}
