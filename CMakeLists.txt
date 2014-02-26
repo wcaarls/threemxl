@@ -37,20 +37,21 @@ set(WORKSPACE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 # Build relevant DBL repo things
-#set(TARGET ${PROJECT_NAME}_dbl)
-#add_library(${TARGET} STATIC)
-#include(${WORKSPACE_DIR}/dbl/platform/hardware/dynamixel/dynamixel.cmake)
-#include(${WORKSPACE_DIR}/dbl/platform/io/logging/stdlogging.cmake)
-
-# Main threemxl library
 set(TARGET ${PROJECT_NAME})
 add_library(${PROJECT_NAME} src/CDxlROSPacketHandler.cpp ${FTDI_SOURCE})
+
+if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  target_link_libraries(${PROJECT_NAME} -Wl,-whole-archive)
+endif()
+
 include(${WORKSPACE_DIR}/dbl/platform/hardware/dynamixel/dynamixel.cmake)
 include(${WORKSPACE_DIR}/dbl/platform/io/logging/stdlogging.cmake)
+
+if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  target_link_libraries(${PROJECT_NAME} -Wl,-no-whole-archive)
+endif()
+
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${LIBFTDIPP_LDFLAGS} ${TINYXML_LDFLAGS} ${MUPARSER_LDFLAGS})
-#set(DBL_STATIC_LIBS -L${CMAKE_LIBRARY_OUTPUT_DIRECTORY} configuration half serial stdlogging dynamixel)
-#target_link_libraries(${PROJECT_NAME} LINK_PRIVATE -Wl,-whole-archive ${DBL_STATIC_LIBS} -Wl,-no-whole-archive
-#                                      LINK_PUBLIC  ${catkin_LIBRARIES} ${LIBFTDIPP_LDFLAGS} ${TINYXML_LDFLAGS} ${MUPARSER_LDFLAGS})
 
 # Console
 add_executable(console src/console.cpp)

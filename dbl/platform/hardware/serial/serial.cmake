@@ -5,7 +5,11 @@
 # 30-03-2010 (wcaarls): Initial revision
 #
 
-TARGET_LINK_LIBRARIES(${TARGET} serial)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	TARGET_LINK_LIBRARIES(${TARGET} serial -force_load)
+else()
+	TARGET_LINK_LIBRARIES(${TARGET} serial)
+endif()
 
 IF (NOT __SERIAL_CMAKE_INCLUDED)
   SET(__SERIAL_CMAKE_INCLUDED 1)
