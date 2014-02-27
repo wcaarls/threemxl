@@ -102,7 +102,7 @@ class C3mxl: public CDxlGeneric
 		double		mLinearPosition;	// Position [m]
 		double		mSpeed;			// Speed [rad/s]
 		double		mAcceleration;	// Acceleration [rad/s^2]
-		double		mLinearAcceleration;	// Acceleration [rad/s^2]
+		double		mLinearAcceleration;	// Acceleration [m/s^2]
 		unsigned char		mStatus;			// Status value of 3mxl
 		unsigned char		mMotorInitialized;	// this value tells you that the motor did the initialization procedure
 
@@ -268,6 +268,8 @@ class C3mxl: public CDxlGeneric
 		virtual int		getLinearPos();
 		virtual int		getPosAndSpeed();
 		virtual int		getTorquePosSpeed();
+		virtual int		getAcceleration();
+		virtual int		getLinearAcceleration();
 		virtual int		getState();
 		virtual int		getVoltage();
 		virtual int		getBusVoltage();
@@ -277,12 +279,12 @@ class C3mxl: public CDxlGeneric
 		virtual int		getStatus();
 		virtual int		getLog();
 		virtual int		get3MxlMode();
-		virtual int		getAcceleration();
-		virtual int		getLinearAcceleration();
 
 		virtual double	presentPos()			{return mPosition;}
-		virtual double	presentLinearPos()			{return mLinearPosition;}
+		virtual double	presentLinearPos()		{return mLinearPosition;}
 		virtual double	presentSpeed()			{return mSpeed;}
+		virtual double  presentAcceleration()		{return mAcceleration;};
+		virtual double  presentLinearAcceleration()	{return mLinearAcceleration;};
 		virtual double	presentLoad()			{mLogWarningLn("presentLoadfunction not implemented");return DXL_NOT_INITIALIZED;}
 		virtual double	presentVoltage()		{return mVoltage;}
 		virtual double	presentBusVoltage()		{return mBusVoltage;}
@@ -294,10 +296,8 @@ class C3mxl: public CDxlGeneric
 		virtual double	presentTemp()			{mLogWarningLn("presentTemp function not implemented");return DXL_NOT_INITIALIZED;}
 		virtual double	presentCurrent()		{return mCurrent;}
 		virtual double	presentTorque()			{return mTorque;}
-		virtual int		presentStatus()			{return (int)mStatus;}
-		virtual bool	presentMotorInitState() {return (bool)mMotorInitialized;}
-		virtual double  presentAcceleration()	{return mAcceleration;};
-		virtual double  presentLinearAcceleration()	{return mLinearAcceleration;};
+		virtual int	presentStatus()			{return (int)mStatus;}
+		virtual bool	presentMotorInitState()		{return (bool)mMotorInitialized;}
 
 		WORD			presentCWAngleLimit()	{mLogWarningLn("presentCWAngleLimit function not implemented"); return DXL_NOT_INITIALIZED;}
 		WORD			presentCCWAngleLimit()	{mLogWarningLn("presentCCWAngleLimit function not implemented"); return DXL_NOT_INITIALIZED;}

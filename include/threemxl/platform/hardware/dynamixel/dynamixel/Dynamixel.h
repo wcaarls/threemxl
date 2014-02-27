@@ -153,6 +153,8 @@ class CDynamixel: public CDxlGeneric
 		virtual double	presentPos()			{return mPosition;}
 		virtual double	presentLinearPos()		{mLogWarningLn("presentLinearPos function not implemented");return 0;}
 		virtual double	presentSpeed()			{return mSpeed;}
+		virtual double  presentAcceleration()		{mLogWarningLn("presentAcceleration function not implemented");return 0;};
+		virtual double  presentLinearAcceleration()	{mLogWarningLn("presentLinearAcceleration function not implemented");return 0;};
 		virtual double	presentLoad()			{return mLoad;}
 		virtual double	presentVoltage()		{return mVoltage;}
 		virtual double	presentBusVoltage()		{mLogWarningLn("presentBusVoltage function not implemented"); return 0;}

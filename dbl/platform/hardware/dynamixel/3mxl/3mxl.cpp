@@ -505,7 +505,7 @@ int C3mxl::getLinearAcceleration()
 	if (result != DXL_SUCCESS)
 		return result;
 
-	mLinearAcceleration = mxlAccelerationToInternalAcceleration(data);
+	mLinearAcceleration = mxlLinearAccelerationToInternalLinearAcceleration(data);
 
 	return DXL_SUCCESS;
 }

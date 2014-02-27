@@ -655,7 +655,15 @@ public:
 		/// Read torque, position and speed from hardware.
 		/** \see presentTorque() presentPos() presentSpeed(). */
 		virtual int		getTorquePosSpeed(){mLogWarningLn("getTorquePosSpeed function not implemented"); return false;};
-
+		
+		/// Read acceleration from hardware.
+		/** \see presentAcceleration(). */
+		virtual int		getAcceleration(){mLogWarningLn("getAcceleration function not implemented"); return false;};
+		
+		/// Read linear acceleration from hardware.
+		/** \see presentLinearAcceleration(). */		
+		virtual int		getLinearAcceleration(){mLogWarningLn("getLinearAcceleration function not implemented"); return false;};
+		
 		/// Read status from hardware.
 		virtual int		getStatus(){mLogWarningLn("getStatus function not implemented"); return false;};
 		
@@ -674,10 +682,18 @@ public:
 		/** \returns Position in [m]. */
 		virtual double	presentLinearPos()=0;
 
-		/// Get cached speed .
+		/// Get cached speed.
 		/** \returns Speed in [rad/s]. */
 		virtual double	presentSpeed()=0;
 
+		/// Get cached acceleration.
+		/** \returns Acceleration in [rad/s^2]. */
+		virtual double  presentAcceleration()=0;
+		
+		/// Get cached linear acceleration.
+		/** \returns Acceleration in [m/s^2]. */
+		virtual double  presentLinearAcceleration()=0;
+		
 		/// Get cached load value.
 		/** \returns Load in [Nm]. */
 		virtual double	presentLoad()=0;
