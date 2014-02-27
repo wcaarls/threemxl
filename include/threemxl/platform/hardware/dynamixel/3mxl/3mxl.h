@@ -101,6 +101,8 @@ class C3mxl: public CDxlGeneric
 		double		mPosition;		// Position [rad]
 		double		mLinearPosition;	// Position [m]
 		double		mSpeed;			// Speed [rad/s]
+		double		mAcceleration;	// Acceleration [rad/s^2]
+		double		mLinearAcceleration;	// Acceleration [rad/s^2]
 		unsigned char		mStatus;			// Status value of 3mxl
 		unsigned char		mMotorInitialized;	// this value tells you that the motor did the initialization procedure
 
@@ -275,6 +277,8 @@ class C3mxl: public CDxlGeneric
 		virtual int		getStatus();
 		virtual int		getLog();
 		virtual int		get3MxlMode();
+		virtual int		getAcceleration();
+		virtual int		getLinearAcceleration();
 
 		virtual double	presentPos()			{return mPosition;}
 		virtual double	presentLinearPos()			{return mLinearPosition;}
@@ -292,6 +296,8 @@ class C3mxl: public CDxlGeneric
 		virtual double	presentTorque()			{return mTorque;}
 		virtual int		presentStatus()			{return (int)mStatus;}
 		virtual bool	presentMotorInitState() {return (bool)mMotorInitialized;}
+		virtual double  presentAcceleration()	{return mAcceleration;};
+		virtual double  presentLinearAcceleration()	{return mLinearAcceleration;};
 
 		WORD			presentCWAngleLimit()	{mLogWarningLn("presentCWAngleLimit function not implemented"); return DXL_NOT_INITIALIZED;}
 		WORD			presentCCWAngleLimit()	{mLogWarningLn("presentCCWAngleLimit function not implemented"); return DXL_NOT_INITIALIZED;}

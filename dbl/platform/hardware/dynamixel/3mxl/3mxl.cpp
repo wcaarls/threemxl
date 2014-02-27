@@ -318,7 +318,7 @@ int C3mxl::setMotorOffset(double offset)
 	if (!mInitialized)
 		return DXL_NOT_INITIALIZED;
 	mLogCrawlLn("set motorOffset with parameter " << offset);
-	WORD offsetmRad = (offset * 1000); // offset mRad
+	WORD offsetmRad = internalPosToMxlPos(offset); // offset mRad
 	return writeData(M3XL_OFFSET_MOTOR_L, 2,(BYTE*)&offsetmRad , false);
 
 }
@@ -330,7 +330,7 @@ int C3mxl::setJointOffset(double offset)
 
 	mLogCrawlLn("setJointOffset with parameter " << offset);
 
-	WORD offsetmRad = (offset * 1000); // offset in mRad
+	WORD offsetmRad = internalPosToMxlPos(offset); // offset in mRad
 	return writeData(M3XL_OFFSET_JOINT_L, 2,(BYTE*)&offsetmRad , false);
 }
 
@@ -414,9 +414,9 @@ int C3mxl::setWheelDiameter(double diameter)
 
 	mLogCrawlLn("setWheelDiameter with parameter " << diameter);
 
-        WORD data = internalLinearPosToMxlLinearPos(diameter);
+    WORD data = internalLinearPosToMxlLinearPos(diameter);
         
-        return writeData(M3XL_WHEEL_DIAMETER_L, 2, (BYTE*)&data, false);
+    return writeData(M3XL_WHEEL_DIAMETER_L, 2, (BYTE*)&data, false);
 }
 
 int C3mxl::setGearboxRatioMotor(float gearboxratiomotor)
@@ -474,6 +474,38 @@ int C3mxl::get3MxlMode()
 	int result = readData(M3XL_CONTROL_MODE, 1, &mMxlMode);
 	if (result != DXL_SUCCESS)
 		return result;
+
+	return DXL_SUCCESS;
+}
+
+int C3mxl::getAcceleration()
+{
+	if (!mInitialized)
+		return DXL_NOT_INITIALIZED;
+	mLogCrawlLn("getAcceleration()");
+
+	WORD data;
+	int result = readData(M3XL_DESIRED_ACCEL_L, 2, (BYTE *)&data);
+	if (result != DXL_SUCCESS)
+		return result;
+
+	mAcceleration = mxlAccelerationToInternalAcceleration(data);
+
+	return DXL_SUCCESS;
+}
+
+int C3mxl::getLinearAcceleration()
+{
+	if (!mInitialized)
+		return DXL_NOT_INITIALIZED;
+	mLogCrawlLn("getLinearAcceleration()");
+
+	WORD data;
+	int result = readData(M3XL_DESIRED_LINEAR_ACCEL_L, 2, (BYTE *)&data);
+	if (result != DXL_SUCCESS)
+		return result;
+
+	mLinearAcceleration = mxlAccelerationToInternalAcceleration(data);
 
 	return DXL_SUCCESS;
 }
