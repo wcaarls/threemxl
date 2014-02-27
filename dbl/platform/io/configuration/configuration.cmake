@@ -7,11 +7,7 @@
 
 INCLUDE (${WORKSPACE_DIR}/dbl/platform/io/logging/logging.cmake)
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	TARGET_LINK_LIBRARIES(${TARGET} configuration -force_load)
-else()
-	TARGET_LINK_LIBRARIES(${TARGET} configuration)
-endif()
+TARGET_LINK_LIBRARIES(${TARGET} configuration)
 
 IF (NOT __CONFIGURATION_CMAKE_INCLUDED)
   SET(__CONFIGURATION_CMAKE_INCLUDED 1)

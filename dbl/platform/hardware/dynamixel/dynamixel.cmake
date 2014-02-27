@@ -8,11 +8,7 @@
 INCLUDE (${WORKSPACE_DIR}/dbl/platform/hardware/serial/serial.cmake)
 INCLUDE (${WORKSPACE_DIR}/dbl/platform/io/configuration/configuration.cmake)
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	TARGET_LINK_LIBRARIES(${TARGET} dynamixel -force_load)
-else()
-	TARGET_LINK_LIBRARIES(${TARGET} dynamixel)
-endif()
+TARGET_LINK_LIBRARIES(${TARGET} dynamixel)
 
 ADD_DEPENDENCIES(${TARGET} dynamixel)
 
