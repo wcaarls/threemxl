@@ -2,6 +2,11 @@
 Changelog for package threemxl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.2.0 (2014-07-02)
+------------------
+* Add getAcceleration and getLinearAcceleration and fix some wrong data handling
+* OSX Compile fixes (Hans Gaiser)
+
 0.1.8 (2014-01-13)
 ------------------
 * threemxl: moved sync read index to make room for extra analog inputs
