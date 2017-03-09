@@ -1,25 +1,24 @@
 #ifndef __THREEMXL_CONSOLE_H
 #define __THREEMXL_CONSOLE_H
 
-#include <ros/ros.h>
 #include <threemxl/platform/hardware/dynamixel/CDxlGeneric.h>
 
-class DxlROSConsole;
+class DxlConsole;
 
 /// Motor command
-class DxlROSCommand
+class DxlCommand
 {
   public:
 	typedef std::vector<std::string> ArgList;
 
   protected:
-	DxlROSConsole *console_; ///< Console on which to execute command.
+	DxlConsole *console_; ///< Console on which to execute command.
 	size_t nargs_;       ///< Number of arguments.
 	std::string name_;   ///< Command name.
 	std::string help_;   ///< Help information.
 
   public:
-	DxlROSCommand(DxlROSConsole *console, std::string name, size_t nargs, std::string help) :
+	DxlCommand(DxlConsole *console, std::string name, size_t nargs, std::string help) :
 		console_(console), nargs_(nargs), name_(name), help_(help)
 	{
 	}
@@ -84,15 +83,14 @@ class Lockable
     void signal() { pthread_cond_signal(&condition_); }
 };
 
-/// Console appliation example for CDynamixel and CDynamixelROS
-class DxlROSConsole : public Lockable
+/// Console appliation example for CDynamixel and C3MXL
+class DxlConsole : public Lockable
 {
   public:
-    typedef std::vector<DxlROSCommand> CommandList;
+    typedef std::vector<DxlCommand> CommandList;
     typedef std::vector<CDxlGeneric*>  MotorList;
 	
   protected:
-    ros::NodeHandle nh_;   ///< ROS node handle
     CDxlGeneric *motor_;   ///< Current motor interface
     MotorList motors_;     ///< Motor interface list
     LxSerial serial_port_; ///< Serial port interface
@@ -103,7 +101,7 @@ class DxlROSConsole : public Lockable
 
   public:
     /// Constructor
-    DxlROSConsole() : nh_("~"), motor_(NULL), path_(NULL), hb_interval_(0)
+    DxlConsole() : motor_(NULL), path_(NULL), hb_interval_(0)
     {
       // Spawn heartbeat thread
       pthread_create(&hb_thread_, NULL, spin_hb, (void*)this);
@@ -111,7 +109,7 @@ class DxlROSConsole : public Lockable
     
     /// Destructor
     /** Delete motor interface, close serial port, and shut down node handle */
-    ~DxlROSConsole()
+    ~DxlConsole()
     {
       // Prod heartbeat thread. Does not actually work if ros::ok() is true
       lock();
@@ -126,8 +124,6 @@ class DxlROSConsole : public Lockable
         
       if (serial_port_.is_port_open())
         serial_port_.port_close();
-          
-      nh_.shutdown();
     }
     
     /// Get current motor
@@ -169,7 +165,7 @@ class DxlROSConsole : public Lockable
     void spin();
     
     /// Heartbeat thread main function
-    /** \param obj pointer to DxlROSConsole */
+    /** \param obj pointer to DxlConsole */
     static void *spin_hb(void *obj);
 };    
 

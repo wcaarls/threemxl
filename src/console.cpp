@@ -1,11 +1,11 @@
 #include <stdio.h>
+#include <limits.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include <ros/ros.h>
 #include <threemxl/console.h>
-#include <threemxl/C3mxlROS.h>
-#include <threemxl/CDynamixelROS.h>
+#include <threemxl/C3mxl.h>
+#include <threemxl/CDynamixel.h>
 #include <threemxl/platform/io/configuration/XMLConfiguration.h>
 
 #ifdef __MACH__
@@ -26,7 +26,7 @@ using std::dec;
     } \
   } while (0)
 
-bool DxlROSCommand::execute(ArgList args)
+bool DxlCommand::execute(ArgList args)
 {
   // Sanity check
   if (args.size() != nargs_)
@@ -34,7 +34,6 @@ bool DxlROSCommand::execute(ArgList args)
   
   if (name_ == "exit")
   {
-    ros::shutdown();
     return true;
   }
   else if (name_ == "id")
@@ -50,7 +49,7 @@ bool DxlROSCommand::execute(ArgList args)
     else
     {
       CDxlGeneric *motor = console_->getMotor();
-      DxlROSConsole::MotorList &motors = console_->getMotors();
+      DxlConsole::MotorList &motors = console_->getMotors();
     
       cout << "Available motors:" << endl;
       for (size_t ii=0; ii < motors.size(); ++ii)
@@ -84,7 +83,7 @@ bool DxlROSCommand::execute(ArgList args)
     CDxlConfig config;
     std::vector<int> motors;
 
-    for (int id=1; id < BROADCAST_ID && ros::ok(); ++id)
+    for (int id=1; id < BROADCAST_ID; ++id)
     {
       motor->setConfig(config.setID(id));
       if (motor->ping() == DXL_SUCCESS)
@@ -325,7 +324,7 @@ bool DxlROSCommand::execute(ArgList args)
   }
   else if (name_ == "state")
   {
-    DxlROSConsole::MotorList &motors = console_->getMotors();
+    DxlConsole::MotorList &motors = console_->getMotors();
 
     cout << "State:" << endl << std::fixed;
 
@@ -450,24 +449,17 @@ void Lockable::wait(double interval)
     pthread_cond_wait(&condition_, &mutex_);
 }
 
-CDxlGeneric *DxlROSConsole::createMotor()
+CDxlGeneric *DxlConsole::createMotor()
 {
   CDxlGeneric *motor;
   
-  if (strncmp(path_, "/dev", 4))
-  {
-    motor = new C3mxlROS(path_);
-  }
-  else
-  {
-    motor = new C3mxl();
-    motor->setSerialPort(&serial_port_);
-  }
+  motor = new C3mxl();
+  motor->setSerialPort(&serial_port_);
 
   return motor;
 }
 
-void DxlROSConsole::setMotor(int id)
+void DxlConsole::setMotor(int id)
 {
   motor_ = NULL;
   
@@ -487,82 +479,75 @@ void DxlROSConsole::setMotor(int id)
   }
 }
 
-void DxlROSConsole::init(char *path)
+void DxlConsole::init(char *path)
 {
   path_ = path;
   
-  if (strncmp(path_, "/dev", 4))
-  {
-    ROS_INFO_STREAM("Using shared_serial at " << path_);
-  }
-  else
-  {
-    ROS_INFO_STREAM("Using direct connection at " << path_);
-    serial_port_.port_open(path_, LxSerial::RS485_FTDI);
-    serial_port_.set_speed(LxSerial::S921600);
-  }
+  cout << "Using direct connection at " << path_ << endl;
+  serial_port_.port_open(path_, LxSerial::RS485_FTDI);
+  serial_port_.set_speed(LxSerial::S921600);
   
   // Register commands
-  commands_.push_back(DxlROSCommand(this, "exit",    0, "exit                     Quit program."));
-  commands_.push_back(DxlROSCommand(this, "id",      0, "id                       Lists available motors."));
-  commands_.push_back(DxlROSCommand(this, "id",      1, "id      <id>             Switches motor. id is an integer between 0 and 255."));
-  commands_.push_back(DxlROSCommand(this, "hb",      1, "hb      <frequency>      Sets heartbeat frequency. 0 disables heartbeat."));
+  commands_.push_back(DxlCommand(this, "exit",    0, "exit                     Quit program."));
+  commands_.push_back(DxlCommand(this, "id",      0, "id                       Lists available motors."));
+  commands_.push_back(DxlCommand(this, "id",      1, "id      <id>             Switches motor. id is an integer between 0 and 255."));
+  commands_.push_back(DxlCommand(this, "hb",      1, "hb      <frequency>      Sets heartbeat frequency. 0 disables heartbeat."));
 
-  commands_.push_back(DxlROSCommand(this, "init",    0, "init                     Initializes the motor."));
-  commands_.push_back(DxlROSCommand(this, "mode",    1, "mode    <mode>           Sets the control mode. mode is one of {pos|speed|current|torque|sine|ext_init}."));
-  commands_.push_back(DxlROSCommand(this, "config",  1, "config  <file>           Configure the motor with an XML file."));
-  commands_.push_back(DxlROSCommand(this, "config",  2, "config  <file> <section> Configure the motor with a section from an XML file."));
+  commands_.push_back(DxlCommand(this, "init",    0, "init                     Initializes the motor."));
+  commands_.push_back(DxlCommand(this, "mode",    1, "mode    <mode>           Sets the control mode. mode is one of {pos|speed|current|torque|sine|ext_init}."));
+  commands_.push_back(DxlCommand(this, "config",  1, "config  <file>           Configure the motor with an XML file."));
+  commands_.push_back(DxlCommand(this, "config",  2, "config  <file> <section> Configure the motor with a section from an XML file."));
 
-  commands_.push_back(DxlROSCommand(this, "pos",     0, "pos                      Gets the current position in [rad]."));
-  commands_.push_back(DxlROSCommand(this, "pos",     1, "pos     <position>       Sets the target position in [rad]."));
-  commands_.push_back(DxlROSCommand(this, "pos",     2, "pos     <pos> <speed>    Sets the target position in [rad] and maximum velocity in [rad/s]."));
-  commands_.push_back(DxlROSCommand(this, "pos",     3, "pos     <pos> <sp> <ac>  Sets the target position in [rad], velocity in [rad/s] and acceleration in [rad/s^2]."));
-  commands_.push_back(DxlROSCommand(this, "speed",   1, "speed   <speed>          Sets the target speed in [rad/s]."));
-  commands_.push_back(DxlROSCommand(this, "accel",   0, "accel                    Gets the current acceleration [rad/s^2]."));
-  commands_.push_back(DxlROSCommand(this, "accel",   1, "accel   <accel>          Sets the acceleration for trajectory generation in [rad/s^2]."));
+  commands_.push_back(DxlCommand(this, "pos",     0, "pos                      Gets the current position in [rad]."));
+  commands_.push_back(DxlCommand(this, "pos",     1, "pos     <position>       Sets the target position in [rad]."));
+  commands_.push_back(DxlCommand(this, "pos",     2, "pos     <pos> <speed>    Sets the target position in [rad] and maximum velocity in [rad/s]."));
+  commands_.push_back(DxlCommand(this, "pos",     3, "pos     <pos> <sp> <ac>  Sets the target position in [rad], velocity in [rad/s] and acceleration in [rad/s^2]."));
+  commands_.push_back(DxlCommand(this, "speed",   1, "speed   <speed>          Sets the target speed in [rad/s]."));
+  commands_.push_back(DxlCommand(this, "accel",   0, "accel                    Gets the current acceleration [rad/s^2]."));
+  commands_.push_back(DxlCommand(this, "accel",   1, "accel   <accel>          Sets the acceleration for trajectory generation in [rad/s^2]."));
   
-  commands_.push_back(DxlROSCommand(this, "lpos",    0, "lpos                     Gets the current position in [m]."));
-  commands_.push_back(DxlROSCommand(this, "lpos",    1, "lpos    <position>       Sets the target position in [m]."));
-  commands_.push_back(DxlROSCommand(this, "lpos",    2, "lpos    <pos> <speed>    Sets the target position in [m] and maximum velocity in [m/s]."));
-  commands_.push_back(DxlROSCommand(this, "lpos",    3, "lpos    <pos> <sp> <ac>  Sets the target position in [m], velocity in [m/s] and acceleration in [m/s^2]."));
-  commands_.push_back(DxlROSCommand(this, "lspeed",  1, "lspeed  <speed>          Sets the target speed in [m/s]."));
-  commands_.push_back(DxlROSCommand(this, "laccel",  0, "laccel                   Gets the current acceleration in [m/s^2]."));
-  commands_.push_back(DxlROSCommand(this, "laccel",  1, "laccel  <accel>          Sets the acceleration for trajectory generation in [m/s^2]."));
+  commands_.push_back(DxlCommand(this, "lpos",    0, "lpos                     Gets the current position in [m]."));
+  commands_.push_back(DxlCommand(this, "lpos",    1, "lpos    <position>       Sets the target position in [m]."));
+  commands_.push_back(DxlCommand(this, "lpos",    2, "lpos    <pos> <speed>    Sets the target position in [m] and maximum velocity in [m/s]."));
+  commands_.push_back(DxlCommand(this, "lpos",    3, "lpos    <pos> <sp> <ac>  Sets the target position in [m], velocity in [m/s] and acceleration in [m/s^2]."));
+  commands_.push_back(DxlCommand(this, "lspeed",  1, "lspeed  <speed>          Sets the target speed in [m/s]."));
+  commands_.push_back(DxlCommand(this, "laccel",  0, "laccel                   Gets the current acceleration in [m/s^2]."));
+  commands_.push_back(DxlCommand(this, "laccel",  1, "laccel  <accel>          Sets the acceleration for trajectory generation in [m/s^2]."));
   
-  commands_.push_back(DxlROSCommand(this, "current", 1, "current <current>        Sets the target current in [A]."));
-  commands_.push_back(DxlROSCommand(this, "torque",  1, "torque  <torque>         Sets the target torque in [Nm]."));
-  commands_.push_back(DxlROSCommand(this, "pwm",     1, "pwm     <dutycycle>      Sets the PWM duty cycle (between -1 and 1)."));
-  commands_.push_back(DxlROSCommand(this, "freq",    1, "freq    <frequency>      Sets the target sine frequency in [Hz]."));
-  commands_.push_back(DxlROSCommand(this, "ampl",    1, "ampl    <amplitude>      Sets the target sine amplitude in [rad]."));
-  commands_.push_back(DxlROSCommand(this, "phase",   1, "phase   <phase>          Sets the target sine phase angle in [rad]."));
+  commands_.push_back(DxlCommand(this, "current", 1, "current <current>        Sets the target current in [A]."));
+  commands_.push_back(DxlCommand(this, "torque",  1, "torque  <torque>         Sets the target torque in [Nm]."));
+  commands_.push_back(DxlCommand(this, "pwm",     1, "pwm     <dutycycle>      Sets the PWM duty cycle (between -1 and 1)."));
+  commands_.push_back(DxlCommand(this, "freq",    1, "freq    <frequency>      Sets the target sine frequency in [Hz]."));
+  commands_.push_back(DxlCommand(this, "ampl",    1, "ampl    <amplitude>      Sets the target sine amplitude in [rad]."));
+  commands_.push_back(DxlCommand(this, "phase",   1, "phase   <phase>          Sets the target sine phase angle in [rad]."));
 
-  commands_.push_back(DxlROSCommand(this, "accel",   1, "accel   <accel>          Sets the acceleration for trajectory generation in [rad/s^2]."));
-  commands_.push_back(DxlROSCommand(this, "moffset", 1, "moffset <offset>         Sets the motor offset in [rad]."));
-  commands_.push_back(DxlROSCommand(this, "joffset", 1, "joffset <offset>         Sets the joint offset in [rad]."));
+  commands_.push_back(DxlCommand(this, "accel",   1, "accel   <accel>          Sets the acceleration for trajectory generation in [rad/s^2]."));
+  commands_.push_back(DxlCommand(this, "moffset", 1, "moffset <offset>         Sets the motor offset in [rad]."));
+  commands_.push_back(DxlCommand(this, "joffset", 1, "joffset <offset>         Sets the joint offset in [rad]."));
 
-  commands_.push_back(DxlROSCommand(this, "jlimits", 2, "jlimits <lower> <upper>  Sets the joint angle limits in [rad]."));
+  commands_.push_back(DxlCommand(this, "jlimits", 2, "jlimits <lower> <upper>  Sets the joint angle limits in [rad]."));
   
-  commands_.push_back(DxlROSCommand(this, "ppid",    0, "ppid                     Gets the position PID gains."));
-  commands_.push_back(DxlROSCommand(this, "ppid",    4, "ppid    <p> <d> <i> <il> Sets the position PID gains. il is the integration limit."));
-  commands_.push_back(DxlROSCommand(this, "spid",    0, "spid                     Gets the speed PID gains."));
-  commands_.push_back(DxlROSCommand(this, "spid",    4, "spid    <p> <d> <i> <il> Sets the speed PID gains. il is the integration limit."));
-  commands_.push_back(DxlROSCommand(this, "cpid",    0, "cpid                     Gets the current PID gains."));
-  commands_.push_back(DxlROSCommand(this, "cpid",    4, "cpid    <p> <d> <i> <il> Sets the current PID gains. il is the integration limit."));
-  commands_.push_back(DxlROSCommand(this, "tpid",    0, "tpid                     Gets the torque PID gains."));
-  commands_.push_back(DxlROSCommand(this, "tpid",    4, "tpid    <p> <d> <i> <il> Sets the torque PID gains. il is the integration limit."));
+  commands_.push_back(DxlCommand(this, "ppid",    0, "ppid                     Gets the position PID gains."));
+  commands_.push_back(DxlCommand(this, "ppid",    4, "ppid    <p> <d> <i> <il> Sets the position PID gains. il is the integration limit."));
+  commands_.push_back(DxlCommand(this, "spid",    0, "spid                     Gets the speed PID gains."));
+  commands_.push_back(DxlCommand(this, "spid",    4, "spid    <p> <d> <i> <il> Sets the speed PID gains. il is the integration limit."));
+  commands_.push_back(DxlCommand(this, "cpid",    0, "cpid                     Gets the current PID gains."));
+  commands_.push_back(DxlCommand(this, "cpid",    4, "cpid    <p> <d> <i> <il> Sets the current PID gains. il is the integration limit."));
+  commands_.push_back(DxlCommand(this, "tpid",    0, "tpid                     Gets the torque PID gains."));
+  commands_.push_back(DxlCommand(this, "tpid",    4, "tpid    <p> <d> <i> <il> Sets the torque PID gains. il is the integration limit."));
 
-  commands_.push_back(DxlROSCommand(this, "bus",     0, "bus                      Displays the current bus voltage."));
-  commands_.push_back(DxlROSCommand(this, "sensors", 0, "sensors                  Displays the current sensor voltages."));
-  commands_.push_back(DxlROSCommand(this, "state",   0, "state                    Displays the current state of the motor board."));
-  commands_.push_back(DxlROSCommand(this, "log",     1, "log     <interval>       Initializes logging for this motor. interval is in [ms]."));
-  commands_.push_back(DxlROSCommand(this, "getlog",  0, "getlog                   Displays the log of the last motor command."));
-  commands_.push_back(DxlROSCommand(this, "savelog", 1, "savelog <filename>       Saves the log of the last motor command."));
+  commands_.push_back(DxlCommand(this, "bus",     0, "bus                      Displays the current bus voltage."));
+  commands_.push_back(DxlCommand(this, "sensors", 0, "sensors                  Displays the current sensor voltages."));
+  commands_.push_back(DxlCommand(this, "state",   0, "state                    Displays the current state of the motor board."));
+  commands_.push_back(DxlCommand(this, "log",     1, "log     <interval>       Initializes logging for this motor. interval is in [ms]."));
+  commands_.push_back(DxlCommand(this, "getlog",  0, "getlog                   Displays the log of the last motor command."));
+  commands_.push_back(DxlCommand(this, "savelog", 1, "savelog <filename>       Saves the log of the last motor command."));
   
-  commands_.push_back(DxlROSCommand(this, "table",   0, "table                    Displays the entire control table."));
-  commands_.push_back(DxlROSCommand(this, "scan",    0, "scan                     Scan bus for motors."));
+  commands_.push_back(DxlCommand(this, "table",   0, "table                    Displays the entire control table."));
+  commands_.push_back(DxlCommand(this, "scan",    0, "scan                     Scan bus for motors."));
 }
 
-void DxlROSConsole::execute(std::string line)
+void DxlConsole::execute(std::string line)
 {
   // Tokenize
   size_t pos = line.find(' ');
@@ -620,7 +605,7 @@ void DxlROSConsole::execute(std::string line)
     cout << "Error: " << endl << "  Unknown command '" << cmd << "'" << endl;
 }
 
-void DxlROSConsole::spin()
+void DxlConsole::spin()
 {
   char *buf, *home = getenv("HOME"), history_file[PATH_MAX] = {0};
   std::string line;
@@ -631,7 +616,7 @@ void DxlROSConsole::spin()
   read_history(history_file);
   
   cout << "3mxl console, type 'help' for help." << endl;
-  while (ros::ok())
+  while (1)
   {
     // Prompt for input
     buf = readline(">> ");
@@ -671,9 +656,6 @@ void DxlROSConsole::spin()
         unlock();
       }
     }
-    
-    // Process ROS stuff
-    ros::spinOnce();
   }
   
   lock();
@@ -688,7 +670,7 @@ void DxlROSConsole::spin()
   write_history(history_file);
 }
 
-void DxlROSConsole::setHeartbeatInterval(double interval)
+void DxlConsole::setHeartbeatInterval(double interval)
 {
   hb_interval_ = interval;
   
@@ -697,30 +679,30 @@ void DxlROSConsole::setHeartbeatInterval(double interval)
     signal();
 }
 
-void *DxlROSConsole::spin_hb(void *obj)
+void *DxlConsole::spin_hb(void *obj)
 {
-  DxlROSConsole *console = static_cast<DxlROSConsole*>(obj);
+  DxlConsole *console = static_cast<DxlConsole*>(obj);
   if (!console)
   {
-    ROS_ERROR("Couldn't start heartbeat thread");
+    cout << "Couldn't start heartbeat thread" << std::endl;
     return NULL;
   }
   
   std::vector<int> status;
   
-  while (ros::ok())
+  while (1)
   {
     console->lock();
     
     // Wait for next update. This function may return prematurely, but we don't care.
     console->wait(console->hb_interval_);
     
-    if (ros::ok() && console->hb_interval_ > 0)
+    if (console->hb_interval_ > 0)
     {
       bool error = false;
     
       // Get status of all motors
-      DxlROSConsole::MotorList &motors = console->getMotors();
+      DxlConsole::MotorList &motors = console->getMotors();
       for (size_t ii=0; ii < motors.size(); ++ii)
       {
         if (ii >= status.size())
@@ -761,7 +743,6 @@ void *DxlROSConsole::spin_hb(void *obj)
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "dxl_ros_console");
   gLogFactory().setLevel(llWarning);
 
   char *path=NULL, default_path[] = "/dev/ttyUSB0";
@@ -770,12 +751,10 @@ int main(int argc, char **argv)
   else
     path = default_path;
  
-  DxlROSConsole dxl_ros_console;
+  DxlConsole dxl_console;
   
-  dxl_ros_console.init(path);
-  dxl_ros_console.spin();
-  
-  ros::shutdown();
+  dxl_console.init(path);
+  dxl_console.spin();
   
   return 0;
 } 
